@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import "./style.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import api from "./workFlows/API";
 toast.configure();
 
 class Entities extends Component {
@@ -10,14 +12,25 @@ class Entities extends Component {
     filteredOptions: [],
     showEntityOptions: false,
     userInput: "",
+    entityData: [],
   };
+
+  componentDidMount() {
+    const val = api.fetchAllEntities();
+    console.log("onTextChange", val);
+    this.setState({ entityData: val });
+  }
 
   onTextChange = (e) => {
     let entityList = ["Client", "PhonePe", "Altran", "Wipro", "Grep", "Invest"];
-    //const { options } = this.props;
-
+    const { entityData } = this.state;
+    // let entityList = [];
+    // entityList = entityData.map((en, index) => {
+    //   Object.keys(en);
+    //   //entityList.push(Object.keys(en));
+    // });
     const userInput = e.target.value;
-    console.log("onTextChange", userInput);
+    console.log("onTextChange", entityList);
     const filteredOptions = entityList.filter(
       (option) => option.toLowerCase().indexOf(userInput.toLowerCase()) > -1
     );
@@ -41,9 +54,13 @@ class Entities extends Component {
     const { userInput } = this.state;
     console.log("userInput", userInput);
 
-    toast("Yahoo !! " + userInput + " has been selected.", {
-      position: toast.POSITION.TOP_CENTER,
-    });
+    userInput != ""
+      ? toast("Yahoo !! " + userInput + " has been selected.", {
+          position: toast.POSITION.TOP_CENTER,
+        })
+      : toast("Please select the Entity.", {
+          position: toast.POSITION.TOP_CENTER,
+        });
   };
 
   render() {
@@ -86,7 +103,6 @@ class Entities extends Component {
             className="search-box"
             placeholder="Search Entities..."
             onChange={(e) => this.onTextChange(e)}
-            //onKeyDown={this.onKeyDown}
             value={userInput}
           />
           <input
