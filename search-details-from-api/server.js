@@ -4,9 +4,10 @@ const cors = require("cors");
 
 const app = express();
 const port = 3000;
-const connection = require("./src/workFlows/fetchFromDb");
-//app.use(cors());
+//to connect to the database
+//const connection = require("./src/workFlows/fetchFromDb");
 
+//sample terminal data
 let terminal = [
   {
     entityId: 1,
@@ -51,12 +52,19 @@ app.use(bodyParser.json());
 // parse requests of content-type: application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// simple route
-app.get("/api", (req, res) => {
+// sample home route
+app.get("/", (req, res) => {
   res.json({ message: " Well! I am up." });
 });
 
-app.get("/terminal", cors(), (req, res) => {
+/****
+ *
+ * route to fetch all data from  db
+ * Uncomment below code for  integration with db
+ *
+ * */
+
+/*app.get("/terminal", cors(), (req, res) => {
   try {
     connection.query("Select * from entity_list", function (
       error,
@@ -64,18 +72,19 @@ app.get("/terminal", cors(), (req, res) => {
       fields
     ) {
       if (error) throw error;
-      res.end(JSON.stringify(results));
+      res.end(JSON.stringify(results)); //sends Json data to client through JSON.stringify()
     });
 
     res.status(404).send("Nothing found");
   } catch (e) {
     console.log(e);
   }
-});
+});*/
 
-// app.get("/terminal", cors(), (req, res) => {
-//   res.json(terminal);
-// });
+// sample terminal route
+app.get("/terminal", cors(), (req, res) => {
+  res.json(terminal);
+});
 
 // set port, listen for requests
 app.listen(port, () => {
