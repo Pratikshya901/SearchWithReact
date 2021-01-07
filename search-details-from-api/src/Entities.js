@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import "./style.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 import api from "./workFlows/API";
 toast.configure();
@@ -16,21 +17,26 @@ class Entities extends Component {
   };
 
   componentDidMount() {
-    const val = api.fetchAllEntities();
-    console.log("onTextChange", val);
-    this.setState({ entityData: val });
+    // const val = api.getEntityData();
+    this.getEntityData();
+  }
+
+  async getEntityData() {
+    const response = await axios.get("http://localhost:3000/terminal");
+
+    this.setState({ entityData: response.data });
   }
 
   onTextChange = (e) => {
-    let entityList = ["Client", "PhonePe", "Altran", "Wipro", "Grep", "Invest"];
     const { entityData } = this.state;
-    // let entityList = [];
-    // entityList = entityData.map((en, index) => {
-    //   Object.keys(en);
-    //   //entityList.push(Object.keys(en));
-    // });
+
+    let entityList = [];
+
+    entityData.map((d, index) => {
+      entityList.push(d.entityName);
+    });
     const userInput = e.target.value;
-    console.log("onTextChange", entityList);
+
     const filteredOptions = entityList.filter(
       (option) => option.toLowerCase().indexOf(userInput.toLowerCase()) > -1
     );
@@ -52,7 +58,6 @@ class Entities extends Component {
   };
   onSubmit = (e) => {
     const { userInput } = this.state;
-    console.log("userInput", userInput);
 
     userInput != ""
       ? toast("Yahoo !! " + userInput + " has been selected.", {

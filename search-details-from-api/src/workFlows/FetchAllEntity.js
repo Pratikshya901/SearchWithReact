@@ -1,3 +1,26 @@
+const sql = require("./fetchFromDb.js");
+
+const AllEntity = function (entity) {
+  this.entityId = entity.entityId;
+  this.entityName = entity.entityName;
+  this.isActive = entity.isActive;
+  this.description = entity.description;
+  this.ownerEmail = entity.ownerEmail;
+};
+
+AllEntity.getAll = (result) => {
+  sql.query("SELECT * FROM entity_list", (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    console.log("entity_list: ", res);
+    result(null, res);
+  });
+};
+
 // const express = require("express");
 // const bodyParser = require("body-parser");
 // const cors = require("cors");

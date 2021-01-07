@@ -1,10 +1,8 @@
-const xhttp = new XMLHttpRequest();
+import axios from "axios";
 
 class Api {
-  fetchAllEntities() {
-    xhttp.open("GET", "http://localhost:3000/terminal", false);
-    xhttp.send();
-    return JSON.parse(xhttp.responseText);
+  async getEntityData() {
+    const response = await axios.get("http://localhost:3000/terminal");
   }
 }
 const api = new Api();
